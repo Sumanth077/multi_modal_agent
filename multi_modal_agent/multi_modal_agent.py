@@ -56,6 +56,7 @@ class State(rx.State):
             agent = Agent(
                 name="Multimodal Analyst",
                 model=Gemini(id="gemini-2.0-flash-exp"),
+                tools=[DuckDuckGo()],
                 markdown=True,
             )
             
