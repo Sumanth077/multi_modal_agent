@@ -49,6 +49,7 @@ class State(rx.State):
         async with self:
             self.processing = True
             yield
+            await asyncio.sleep(1)
             
 
         try:
