@@ -1,13 +1,11 @@
 import reflex as rx
-from pathlib import Path
-import tempfile
-from typing import Optional
 import google.generativeai as genai
 from phi.agent import Agent
 from phi.model.google import Gemini
 from phi.tools.duckduckgo import DuckDuckGo
 import time
 import asyncio
+
 
 class State(rx.State):
     """State for the multimodal AI agent application."""
@@ -51,10 +49,11 @@ class State(rx.State):
         async with self:
             self.processing = True
             yield
+            
 
         try:
             agent = Agent(
-                name="Multimodal Analyst",
+                name="Multimodal Video Analyst",
                 model=Gemini(id="gemini-2.0-flash-exp"),
                 tools=[DuckDuckGo()],
                 markdown=True,
@@ -62,7 +61,8 @@ class State(rx.State):
             
             video_file = genai.upload_file(str(self.video))
             while video_file.state.name == "PROCESSING":
-                time.sleep(2)
+                await asyncio.sleep(2)
+                # time.sleep(2)
                 video_file = genai.get_file(video_file.name)
                 
             prompt = f"""
